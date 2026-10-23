@@ -1,0 +1,146 @@
+[
+  {
+    "id": "M01",
+    "regla": "Edad",
+    "cambio": "edad >= EDAD_ADULTO  →  edad > EDAD_ADULTO",
+    "zombi": "SOBREVIVE",
+    "auditor": "SOBREVIVE",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M02",
+    "regla": "Edad",
+    "cambio": "edad < EDAD_ADULTO  →  edad <= EDAD_ADULTO",
+    "zombi": "SOBREVIVE",
+    "auditor": "SOBREVIVE",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M03",
+    "regla": "Edad",
+    "cambio": "especialidad === 'pediatria' &&  →  especialidad === 'pediatria' ||",
+    "zombi": "SOBREVIVE",
+    "auditor": "muerto",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M04",
+    "regla": "Horario",
+    "cambio": "dia === 0  →  dia === 7",
+    "zombi": "SOBREVIVE",
+    "auditor": "muerto",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M05",
+    "regla": "Horario",
+    "cambio": "hora < HORA_APERTURA  →  hora <= HORA_APERTURA",
+    "zombi": "SOBREVIVE",
+    "auditor": "SOBREVIVE",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M06",
+    "regla": "Horario",
+    "cambio": "hora >= HORA_CIERRE_SABADO  →  hora > HORA_CIERRE_SABADO",
+    "zombi": "SOBREVIVE",
+    "auditor": "SOBREVIVE",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M07",
+    "regla": "Horario",
+    "cambio": "dia === 6 &&  →  dia === 6 ||",
+    "zombi": "SOBREVIVE",
+    "auditor": "muerto",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M08",
+    "regla": "Horario",
+    "cambio": "hora >= HORA_CIERRE)  →  hora > HORA_CIERRE)",
+    "zombi": "SOBREVIVE",
+    "auditor": "SOBREVIVE",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M09",
+    "regla": "Horario",
+    "cambio": "hora === HORA_ALMUERZO  →  hora === HORA_ALMUERZO + 1",
+    "zombi": "SOBREVIVE",
+    "auditor": "muerto",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M10",
+    "regla": "Choque",
+    "cambio": "if (c.medicoId !== nueva.medicoId) continue;  →  (eliminado)",
+    "zombi": "SOBREVIVE",
+    "auditor": "muerto",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M11",
+    "regla": "Choque",
+    "cambio": "if (c.estado === 'cancelada') continue;  →  (eliminado)",
+    "zombi": "SOBREVIVE",
+    "auditor": "muerto",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M12",
+    "regla": "Choque",
+    "cambio": "nueva.inicio < c.fin  →  nueva.inicio <= c.fin",
+    "zombi": "SOBREVIVE",
+    "auditor": "SOBREVIVE",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M13",
+    "regla": "Choque",
+    "cambio": "c.inicio < nueva.fin  →  c.inicio <= nueva.fin",
+    "zombi": "SOBREVIVE",
+    "auditor": "SOBREVIVE",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M14",
+    "regla": "Choque",
+    "cambio": "return true;  →  return false;",
+    "zombi": "SOBREVIVE",
+    "auditor": "muerto",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M15",
+    "regla": "Penalización",
+    "cambio": "horas < HORAS_LIMITE_CANCELACION  →  horas <= HORAS_LIMITE_CANCELACION",
+    "zombi": "SOBREVIVE",
+    "auditor": "SOBREVIVE",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M16",
+    "regla": "Penalización",
+    "cambio": "&& !esEmergencia  →  && esEmergencia",
+    "zombi": "SOBREVIVE",
+    "auditor": "muerto",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M17",
+    "regla": "Penalización",
+    "cambio": "monto: MONTO_PENALIZACION  →  monto: 0",
+    "zombi": "SOBREVIVE",
+    "auditor": "muerto",
+    "auditor+fronteras": "muerto"
+  },
+  {
+    "id": "M18",
+    "regla": "Penalización",
+    "cambio": "cancelacionTardia && !esEmergencia  →  cancelacionTardia",
+    "zombi": "SOBREVIVE",
+    "auditor": "muerto",
+    "auditor+fronteras": "muerto"
+  }
+]

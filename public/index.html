@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Citas Médico Familiar</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; color: #1e293b; }
+    section { border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+    input, select, button { padding: .4rem; margin: .2rem 0; }
+    button { cursor: pointer; }
+    .error { color: #b91c1c; }
+    .ok { color: #15803d; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    td, th { border-bottom: 1px solid #e2e8f0; padding: .3rem; text-align: left; }
+  </style>
+</head>
+<body x-data="app()" x-init="cargar()">
+  <h1>Citas Médico Familiar</h1>
+
+  <section>
+    <h2>Nuevo paciente</h2>
+    <input placeholder="Nombre" x-model="paciente.nombre">
+    <input type="date" x-model="paciente.fecha_nacimiento">
+    <button @click="crearPaciente()">Guardar</button>
+  </section>
+
+  <section>
+    <h2>Agendar cita</h2>
+    <select x-model="cita.paciente_id">
+      <option value="">Paciente…</option>
+      <template x-for="p in pacientes" :key="p.id"><option :value="p.id" x-text="p.nombre"></option></template>
+    </select>
+    <select x-model="cita.medico_id">
+      <option value="">Médico…</option>
+      <template x-for="m in medicos" :key="m.id"><option :value="m.id" x-text="m.nombre + ' (' + m.especialidad + ')'"></option></template>
+    </select>
+    <input type="datetime-local" x-model="cita.inicio" step="1800">
+    <button @click="agendar()">Agendar</button>
+  </section>
+
+  <p :class="error ? 'error' : 'ok'" x-text="mensaje"></p>
+
+  <section>
+    <h2>Citas</h2>
+    <label><input type="checkbox" x-model="emergencia"> Cancelar como emergencia</label>
+    <table>
+      <tr><th>Fecha</th><th>Paciente</th><th>Médico</th><th>Estado</th><th></th></tr>
+      <template x-for="c in citas" :key="c.id">
+        <tr>
+          <td x-text="new Date(c.inicio).toLocaleString()"></td>
+          <td x-text="c.paciente"></td>
+          <td x-text="c.medico"></td>
+          <td x-text="c.estado + (c.penalizacion ? ' ($' + c.penalizacion + ')' : '')"></td>
+          <td><button x-show="c.estado === 'activa'" @click="cancelar(c.id)">Cancelar</button></td>
+        </tr>
+      </template>
+    </table>
+  </section>
+
+  <script>
+    function app() {
+      return {
+        medicos: [], pacientes: [], citas: [],
+        paciente: { nombre: '', fecha_nacimiento: '' },
+        cita: { paciente_id: '', medico_id: '', inicio: '' },
+        emergencia: false, mensaje: '', error: false,
+        async api(url, opts = {}) {
+          const r = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...opts });
+          const data = await r.json();
+          this.error = !r.ok;
+          if (!r.ok) this.mensaje = data.error;
+          return r.ok ? data : null;
+        },
+        async cargar() {
+          this.medicos = await this.api('/api/medicos');
+          this.pacientes = await this.api('/api/pacientes');
+          this.citas = await this.api('/api/citas');
+        },
+        async crearPaciente() {
+          if (await this.api('/api/pacientes', { method: 'POST', body: JSON.stringify(this.paciente) })) {
+            this.mensaje = 'Paciente registrado';
+            this.paciente = { nombre: '', fecha_nacimiento: '' };
+            this.cargar();
+          }
+        },
+        async agendar() {
+          const body = { ...this.cita, paciente_id: +this.cita.paciente_id, medico_id: +this.cita.medico_id };
+          if (await this.api('/api/citas', { method: 'POST', body: JSON.stringify(body) })) {
+            this.mensaje = 'Cita agendada';
+            this.cargar();
+          }
+        },
+        async cancelar(id) {
+          const r = await this.api(`/api/citas/${id}/cancelar`, { method: 'POST', body: JSON.stringify({ esEmergencia: this.emergencia }) });
+          if (r) {
+            this.mensaje = r.penalizacion ? `Cita cancelada con penalización de $${r.monto}` : 'Cita cancelada sin penalización';
+            this.cargar();
+          }
+        },
+      };
+    }
+  </script>
+</body>
+</html>
