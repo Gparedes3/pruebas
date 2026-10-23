@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "TZ=America/Guayaquil jest",
-    "test:zombi": "TZ=America/Guayaquil jest tests/zombi.test.js --coverage --collectCoverageFrom=src/reglas.js",
-    "test:auditor": "TZ=America/Guayaquil jest tests/auditor.test.js --coverage --collectCoverageFrom=src/reglas.js",
-    "test:auditor-fronteras": "TZ=America/Guayaquil jest tests/auditor.test.js tests/fronteras.test.js --coverage --collectCoverageFrom=src/reglas.js",
+    "test": "jest",
+    "test:zombi": "jest tests/zombi.test.js --coverage --collectCoverageFrom=src/reglas.js",
+    "test:auditor": "jest tests/auditor.test.js --coverage --collectCoverageFrom=src/reglas.js",
+    "test:auditor-fronteras": "jest tests/auditor.test.js tests/fronteras.test.js --coverage --collectCoverageFrom=src/reglas.js",
     "mutar": "node scripts/mutar.js"
   },
   "keywords": [],
@@ -26,6 +26,13 @@
     "coverageReporters": [
       "text",
       "lcov"
+    ],
+    "setupFiles": [
+      "<rootDir>/tests/tz.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/tz.js"
     ]
   }
 }

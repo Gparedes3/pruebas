@@ -36,7 +36,7 @@ const SUITES = {
 };
 
 function detecta(archivos) {
-  const r = spawnSync('npx', ['jest', '--silent', ...archivos], {
+  const r = spawnSync(process.execPath, [require.resolve('jest/bin/jest'), '--silent', ...archivos], {
     cwd: path.join(__dirname, '..'),
     env: { ...process.env, TZ: 'America/Guayaquil' },
     encoding: 'utf8',
